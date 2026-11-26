@@ -13,11 +13,13 @@ Every estimator returns a dict  name -> (estimate, se)  for the quantities it ca
     'GTE'    tau_D + gamma_G, the global-effect estimate (exposure-aware only; NaN if the design
              has no variation in the treated share across markets)
 """
+import os
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GroupKFold
 
 NAN = (np.nan, np.nan)
+N_JOBS = int(os.environ.get('N_JOBS', 2))   # threads for forests; set N_JOBS=8 on a bigger machine
 
 
 # ---------------------------------------------------------------- helpers
@@ -129,7 +131,7 @@ def ols_exposure(data):
 # ---------------------------------------------------------------- 4-6: orthogonal learners
 def _rf(seed):
     return RandomForestRegressor(n_estimators=200, min_samples_leaf=5, max_features=0.7,
-                                 n_jobs=2, random_state=seed)
+                                 n_jobs=N_JOBS, random_state=seed)
 
 
 def crossfit_residuals(data, treat_cols, n_splits=5, seed=0):
@@ -176,7 +178,7 @@ def causal_forest(data, exposure=False, seed=0, n_estimators=400):
     cols = [d, g] if use_g else [d]
     ytil, Ttil, X = crossfit_residuals(data, cols, seed=seed)
     cf = CausalForest(n_estimators=n_estimators, min_samples_leaf=10, max_samples=0.45,
-                      honest=True, random_state=seed, n_jobs=2)
+                      honest=True, random_state=seed, n_jobs=N_JOBS)
     cf.fit(X, Ttil, ytil)
     theta = cf.oob_predict(X)
     theta = theta.reshape(len(ytil), -1)

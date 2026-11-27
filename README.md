@@ -11,7 +11,7 @@ The simulator is a repeated Cournot market with Q-learning firms. A per-unit sub
 | SP | spillover on untreated firms |
 | GTE | global effect: everyone treated vs. nobody treated |
 
-Seven estimators are compared against these truths: naive contrast, within-market regression, difference-in-differences, double machine learning (DML), causal forest, exposure-aware DML and forest, and OLS with exposure.
+Eight estimators are compared against these truths: naive contrast, within-market regression, difference-in-differences, double machine learning (DML), causal forest, exposure-aware DML and forest, and OLS with exposure.
 
 ## Setup
 
@@ -60,7 +60,6 @@ N_JOBS=8 python scripts/run_pilot.py --reps 20 --markets 300 --Ns 12,16 --speeds
 N_JOBS=8 python scripts/run_pilot.py --reps 20 --markets 300 --Ns 4,6,8 --speeds fast \
     --out results/explore_fast_raw.csv
 ```
-<!-- TODO before publishing: check the exact flags of the exploratory runs in the shell history (especially --seed-offset for the fast-learner run) and the main run. -->
 
 Each row of a raw results file is one (cell, replication, estimator, quantity). The true effects of the replication are stored next to the estimates.
 

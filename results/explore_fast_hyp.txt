@@ -1,0 +1,89 @@
+=== H1: adjusted estimators (within, did, dml, cforest), tau_D
+          pass_DE       gap_GTE      
+              sum count     sum count
+estimator                            
+cforest         5    12      12    12
+did             5    12      12    12
+dml             5    12      12    12
+within          0    12      12    12
+share of cells within 10% of TE-SP: {'cforest': 7, 'did': 6, 'dml': 7, 'within': 12}
+part A (DE recovered within 10%): 15/48, p=0.9972;  part B (GTE gap > 10%): 48/48, p=3.553e-15;  H1 p=0.9972
+estimator                       cell  relbias_DE  relbias_TESP  relbias_GTE  pass_DE  gap_GTE
+   within  N4_fixed_k0.0_fast_policy        0.24          0.01         2.99    False     True
+   within  N4_fixed_k1.5_fast_policy        0.26         -0.01         3.09    False     True
+   within N4_varies_k0.0_fast_policy        0.23         -0.00         3.06    False     True
+   within N4_varies_k1.5_fast_policy        0.24         -0.02         2.91    False     True
+   within  N6_fixed_k0.0_fast_policy        0.14         -0.01         4.23    False     True
+   within  N6_fixed_k1.5_fast_policy        0.17          0.00         4.06    False     True
+   within N6_varies_k0.0_fast_policy        0.17         -0.01         3.97    False     True
+   within N6_varies_k1.5_fast_policy        0.18          0.01         4.05    False     True
+   within  N8_fixed_k0.0_fast_policy        0.14         -0.00         4.96    False     True
+   within  N8_fixed_k1.5_fast_policy        0.14          0.01         4.56    False     True
+   within N8_varies_k0.0_fast_policy        0.12         -0.00         4.62    False     True
+   within N8_varies_k1.5_fast_policy        0.11         -0.00         4.62    False     True
+      dml  N4_fixed_k0.0_fast_policy        0.23          0.00         2.97    False     True
+      dml  N4_fixed_k1.5_fast_policy        0.28          0.00         3.13    False     True
+      dml N4_varies_k0.0_fast_policy        0.07         -0.13         2.54     True     True
+      dml N4_varies_k1.5_fast_policy       -0.03         -0.23         2.06     True     True
+      dml  N6_fixed_k0.0_fast_policy        0.14         -0.01         4.21    False     True
+      dml  N6_fixed_k1.5_fast_policy        0.18          0.00         4.07    False     True
+      dml N6_varies_k0.0_fast_policy        0.10         -0.07         3.65     True     True
+      dml N6_varies_k1.5_fast_policy        0.01         -0.13         3.33     True     True
+      dml  N8_fixed_k0.0_fast_policy        0.13         -0.00         4.94    False     True
+      dml  N8_fixed_k1.5_fast_policy        0.14          0.01         4.56    False     True
+      dml N8_varies_k0.0_fast_policy       -0.05         -0.15         3.77     True     True
+      dml N8_varies_k1.5_fast_policy       -0.20         -0.28         3.08    False     True
+
+=== H2: exposure-aware GTE
+                      cell        estimator  truth  rel_bias  rel_mcse  coverage  pass
+N4_varies_k0.0_fast_policy     dml_exposure 44.322     0.021     0.056      0.90  True
+N4_varies_k1.5_fast_policy     dml_exposure 45.194    -0.002     0.077      0.75  True
+N6_varies_k0.0_fast_policy     dml_exposure 26.428     0.131     0.121      0.85 False
+N6_varies_k1.5_fast_policy     dml_exposure 26.492    -0.120     0.097      0.95 False
+N8_varies_k0.0_fast_policy     dml_exposure 18.514     0.108     0.099      0.85 False
+N8_varies_k1.5_fast_policy     dml_exposure 18.199    -0.286     0.084      0.85 False
+N4_varies_k0.0_fast_policy cforest_exposure 44.322     0.018     0.054      0.90  True
+N4_varies_k1.5_fast_policy cforest_exposure 45.194    -0.007     0.075      0.80  True
+N6_varies_k0.0_fast_policy cforest_exposure 26.428     0.123     0.124      0.80 False
+N6_varies_k1.5_fast_policy cforest_exposure 26.492    -0.129     0.098      0.95 False
+N8_varies_k0.0_fast_policy cforest_exposure 18.514     0.082     0.098      0.85  True
+N8_varies_k1.5_fast_policy cforest_exposure 18.199    -0.332     0.085      0.80 False
+fixed-share cells: exposure-aware GTE estimates available: 0; tau_D within 10% of GTE in 0 of 30 estimator-cell pairs
+varying-share GTE within 10%: 5/12, p=0.8062  (TE part of H2 not tested in this run)
+
+=== H3: coverage below 0.90 (own target)
+                      cell estimator  target  coverage  p_below90
+ N4_fixed_k0.0_fast_policy       dml true_DE      0.00        0.0
+ N4_fixed_k1.5_fast_policy       dml true_DE      0.00        0.0
+N4_varies_k0.0_fast_policy       dml true_DE      0.35        0.0
+ N6_fixed_k0.0_fast_policy       dml true_DE      0.05        0.0
+N6_varies_k0.0_fast_policy       dml true_DE      0.10        0.0
+ N6_fixed_k1.5_fast_policy       dml true_DE      0.00        0.0
+ N8_fixed_k1.5_fast_policy       dml true_DE      0.00        0.0
+ N8_fixed_k0.0_fast_policy       dml true_DE      0.00        0.0
+ N4_fixed_k0.0_fast_policy   cforest true_DE      0.00        0.0
+ N4_fixed_k1.5_fast_policy   cforest true_DE      0.00        0.0
+N8_varies_k0.0_fast_policy       dml true_DE      0.45        0.0
+N8_varies_k1.5_fast_policy       dml true_DE      0.00        0.0
+N4_varies_k0.0_fast_policy   cforest true_DE      0.35        0.0
+N6_varies_k0.0_fast_policy   cforest true_DE      0.10        0.0
+cells with coverage < 0.90: 29 of 36; Bonferroni-adjusted min p = 0.0000
+
+=== H4: learner differences vs design differences (tau_D, no exposure)
+mean |dml - cforest| = 0.581; mean |design difference in dml| = 24.062; bootstrap p(design diff <= learner diff) = 0.0000
+
+=== H5: gap between DE and TE - SP vs N (replication-level truths)
+slope of gap on N: -0.0306 (se 0.0027), one-sided p (slope < 0) = 1.105e-07
+    mean    std
+N              
+4  0.250  0.073
+6  0.170  0.063
+8  0.127  0.064
+
+=== Benjamini-Hochberg across H1-H5
+         p  BH_adj
+H4  0.0000  0.0000
+H3  0.0000  0.0000
+H5  0.0000  0.0000
+H2  0.8062  0.9972
+H1  0.9972  0.9972

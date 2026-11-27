@@ -16,7 +16,7 @@ df["true_TESP"] = df.true_TE - df.true_SP
 Z = 1.96
 C = {"blue": "#257de0", "orange": "#f47230", "aqua": "#00b894", "yellow": "#f2a600"}
 INK, INK2, GRID = "#191919", "#666666", "#e6e6e6"
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 9, "axes.edgecolor": INK2, "axes.labelcolor": INK,
+plt.rcParams.update({"font.family": "Liberation Sans", "font.size": 9, "pdf.fonttype": 42, "ps.fonttype": 42, "axes.edgecolor": INK2, "axes.labelcolor": INK,
                      "xtick.color": INK2, "ytick.color": INK2, "text.color": INK, "axes.spines.top": False,
                      "axes.spines.right": False, "axes.grid": True, "grid.color": GRID, "grid.linewidth": 0.6,
                      "axes.axisbelow": True, "figure.facecolor": "white", "axes.facecolor": "white"})
@@ -39,8 +39,7 @@ fig, ax = plt.subplots(figsize=(3.6, 2.7))
 ax.errorbar(g.index, g["mean"] * 100, yerr=Z * g["std"] / np.sqrt(g["count"]) * 100, color=C["blue"], marker="o", ms=8,
             lw=2, capsize=3, mec="white", mew=1.5)
 ax.set_xticks(NS); ax.set_xlabel("Number of firms N"); ax.set_ylabel("|DE - (TE - SP)| / DE  (%)")
-ax.set_ylim(0, 30); ax.set_title("The direct effect and TE - SP move together as N grows", fontsize=9, loc="left", color=INK)
-fig.tight_layout(); fig.savefig(f"{out}/fig1_gap_by_N.pdf"); fig.savefig(f"{out}/fig1_gap_by_N.png", dpi=200); plt.close(fig)
+ax.set_ylim(0, 30); fig.tight_layout(); fig.savefig(f"{out}/fig1_gap_by_N.pdf"); fig.savefig(f"{out}/fig1_gap_by_N.png", dpi=200); plt.close(fig)
 
 # Figure 2: relative bias of tau_D against DE, by estimator, panels = design x kappa
 ests = [("naive", "Naive", C["yellow"], "s"), ("within", "Within", C["orange"], "^"),
@@ -54,14 +53,12 @@ for i, design in enumerate(["fixed", "varies"]):
             s = cell_stats(est, "tau_D", "true_DE"); s = s[(s.design == design) & (s.kappa == kappa)].sort_values("N")
             ax.errorbar(s.N, s.rb * 100, yerr=s.ci * 100, color=col, marker=mk, ms=7, lw=1.8, capsize=2, mec="white", mew=1, label=lab)
         ax.axhline(0, color=INK2, lw=0.8)
-        ax.set_title(f"{'Fixed' if design == 'fixed' else 'Varying'} treated share, kappa = {kappa}", fontsize=8.5, loc="left")
+        ax.set_title(f"{'Fixed' if design == 'fixed' else 'Varying'} treated share, kappa = {kappa}", fontsize=9, loc="left")
         ax.set_xticks(NS)
         if i == 1: ax.set_xlabel("Number of firms N")
         if j == 0: ax.set_ylabel("Relative bias vs DE (%)")
-axs[0, 0].legend(frameon=False, fontsize=7.5, loc="upper left", ncol=1)
-fig.text(0.01, 0.005, "Grey band: smallest effect of interest (10% of the true effect). Bars: 95% Monte Carlo intervals over 50 repetitions.",
-         fontsize=7, color=INK2)
-fig.tight_layout(rect=(0, 0.02, 1, 1)); fig.savefig(f"{out}/fig2_bias_vs_DE.pdf"); fig.savefig(f"{out}/fig2_bias_vs_DE.png", dpi=200); plt.close(fig)
+axs[0, 0].legend(frameon=False, fontsize=8, loc="upper left", ncol=1)
+fig.tight_layout(rect=(0, 0, 1, 1)); fig.savefig(f"{out}/fig2_bias_vs_DE.pdf"); fig.savefig(f"{out}/fig2_bias_vs_DE.png", dpi=200); plt.close(fig)
 
 # Figure 3: GTE recovery with exposure-aware estimators (share-varying designs)
 ge = [("dml_exposure", "DML, exposure-aware", C["blue"], "o"), ("cforest_exposure", "Forest, exposure-aware", C["aqua"], "D"),
@@ -73,8 +70,8 @@ for j, kappa in enumerate([0.0, 1.5]):
         s = cell_stats(est, "GTE", "true_GTE"); s = s[(s.design == "varies") & (s.kappa == kappa)].sort_values("N")
         ax.errorbar(s.N + (k - 1) * 0.12, s.rb * 100, yerr=s.ci * 100, color=col, marker=mk, ms=7, lw=1.8, capsize=2, mec="white", mew=1, label=lab)
     ax.axhline(0, color=INK2, lw=0.8); ax.set_xticks(NS); ax.set_xlabel("Number of firms N")
-    ax.set_title(f"Varying share, kappa = {kappa}", fontsize=8.5, loc="left")
+    ax.set_title(f"Varying share, kappa = {kappa}", fontsize=9, loc="left")
     if j == 0: ax.set_ylabel("Relative bias vs GTE (%)")
-axs[0].legend(frameon=False, fontsize=7.5, loc="lower left")
+axs[0].legend(frameon=False, fontsize=8, loc="lower left")
 fig.tight_layout(); fig.savefig(f"{out}/fig3_GTE_exposure.pdf"); fig.savefig(f"{out}/fig3_GTE_exposure.png", dpi=200); plt.close(fig)
 print("saved to", out)

@@ -20,12 +20,12 @@ FIELDS = ["cell", "N", "design", "kappa", "speed", "placebo", "rep", "M", "estim
           "est", "se", "true_DE", "true_TE", "true_SP", "true_GTE", "conv", "profit_vs_nash", "profit_sd"]
 
 
-def cells(quick):
-    Ns = [4] if quick else [4, 8]
+def cells(quick, Ns=None, speeds=None, placebos=None):
+    Ns = Ns or ([4] if quick else [4, 8])
     designs = ["fixed", "varies"]
     kappas = [0.0, 1.5]
-    speeds = ["slow"] if quick else ["slow", "fast"]
-    placebos = [False, True]
+    speeds = speeds or (["slow"] if quick else ["slow", "fast"])
+    placebos = [False, True] if placebos is None else placebos
     for N, d, k, s, p in itertools.product(Ns, designs, kappas, speeds, placebos):
         yield dict(N=N, design=d, kappa=k, speed=s, placebo=p)
 
@@ -54,7 +54,13 @@ def main():
     ap.add_argument("--markets", type=int, default=300)
     ap.add_argument("--out", default="results/pilot_raw.csv")
     ap.add_argument("--quick", action="store_true")
+    ap.add_argument("--Ns", default="", help="comma list, e.g. 16 (default: pilot grid)")
+    ap.add_argument("--speeds", default="", help="comma list, e.g. slow")
+    ap.add_argument("--no-placebo", action="store_true", help="skip placebo cells")
     a = ap.parse_args()
+    Ns = [int(x) for x in a.Ns.split(",")] if a.Ns else None
+    speeds = a.speeds.split(",") if a.speeds else None
+    placebos = [False] if a.no_placebo else None
     if a.quick:
         a.reps, a.markets, a.out = 2, 80, "results/quick_raw.csv"
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
@@ -65,7 +71,7 @@ def main():
         w = csv.DictWriter(f, fieldnames=FIELDS)
         if new:
             w.writeheader()
-        for c in cells(a.quick):
+        for c in cells(a.quick, Ns, speeds, placebos):
             cid = cell_id(c)
             for rep in range(a.reps):
                 if (cid, rep) in done:

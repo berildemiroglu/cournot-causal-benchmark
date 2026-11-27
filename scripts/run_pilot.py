@@ -57,6 +57,7 @@ def main():
     ap.add_argument("--Ns", default="", help="comma list, e.g. 16 (default: pilot grid)")
     ap.add_argument("--speeds", default="", help="comma list, e.g. slow")
     ap.add_argument("--no-placebo", action="store_true", help="skip placebo cells")
+    ap.add_argument("--seed-offset", type=int, default=0, help="added to every seed (use e.g. 5000000 for the main run so it never repeats pilot draws)")
     a = ap.parse_args()
     Ns = [int(x) for x in a.Ns.split(",")] if a.Ns else None
     speeds = a.speeds.split(",") if a.speeds else None
@@ -76,7 +77,7 @@ def main():
             for rep in range(a.reps):
                 if (cid, rep) in done:
                     continue
-                seed = (zlib.crc32(cid.encode()) + 1000003 * rep) % (2 ** 31 - 1)
+                seed = (zlib.crc32(cid.encode()) + 1000003 * rep + a.seed_offset) % (2 ** 31 - 1)
                 rng = np.random.default_rng(seed)
                 nt = n_treat_for(c, a.markets, rng)
                 sim = simulate_worlds(a.markets, c['N'], c['kappa'], nt, SPEEDS[c['speed']], seed=seed,
